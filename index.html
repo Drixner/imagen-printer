@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Divisor de Imágenes para Impresión</title>
+    <link href="/src/style.css" rel="stylesheet" />
+    <link
+      rel="icon"
+      type="image/png"
+      href="/green-two-leaves-icon-by-Vexels.svg"
+    />
+    <!-- FilePond CSS -->
+    <link
+      href="https://unpkg.com/filepond/dist/filepond.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+      <!-- Header -->
+      <header class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-800 mb-2">
+          Divisor de Imágenes
+        </h1>
+        <p class="text-gray-600 max-w-2xl mx-auto">
+          Divide tus imágenes en múltiples hojas A4 o A3 para imprimir posters y
+          proyectos grandes de forma rápida y sencilla.
+        </p>
+      </header>
+
+      <!-- Main Content -->
+      <main class="max-w-4xl mx-auto">
+        <!-- File Upload Section -->
+        <section class="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-6">
+          <h2 class="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">
+            1. Sube tu imagen
+          </h2>
+          <div class="w-full">
+            <div
+              id="file-upload-container"
+              class="filepond-container max-w-full"
+            >
+              <!-- FilePond se inicializará aquí -->
+            </div>
+          </div>
+          <div id="file-info" class="mt-4 hidden">
+            <div
+              class="bg-blue-50 border border-blue-200 rounded-lg p-3 sm:p-4"
+            >
+              <div class="flex flex-col sm:flex-row sm:items-center">
+                <svg
+                  class="w-5 h-5 text-blue-600 mb-2 sm:mb-0 sm:mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <div>
+                  <p class="font-medium text-blue-900 text-sm sm:text-base">
+                    Archivo cargado:
+                  </p>
+                  <p
+                    id="file-details"
+                    class="text-sm text-blue-700 break-all"
+                  ></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Configuration Section -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-6">
+          <h2 class="text-2xl font-semibold text-gray-800 mb-4">
+            2. Configuración de impresión
+          </h2>
+          <div class="grid md:grid-cols-2 gap-6">
+            <!-- Division Pattern -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Patrón de división
+              </label>
+              <select
+                id="division-pattern"
+                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <optgroup label="Tamaño A4">
+                  <option value="A4_2x1">2 Hojas A4 (Vertical)</option>
+                  <option value="A4_1x2">2 Hojas A4 (Horizontal)</option>
+                  <option value="A4_2x2" selected>4 Hojas A4</option>
+                </optgroup>
+                <optgroup label="Tamaño A3">
+                  <option value="A3_SINGLE">1 Hoja A3</option>
+                  <option value="A3_2x1">2 Hojas A3 (Vertical)</option>
+                  <option value="A3_1x2">2 Hojas A3 (Horizontal)</option>
+                  <option value="A3_2x2">4 Hojas A3</option>
+                </optgroup>
+              </select>
+            </div>
+
+            <!-- DPI Selection -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Calidad de impresión
+              </label>
+              <select
+                id="dpi-selection"
+                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="150">150 DPI - Calidad básica</option>
+                <option value="300" selected>300 DPI - Calidad estándar</option>
+                <option value="600">600 DPI - Alta calidad</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Pattern Description -->
+          <div id="pattern-description" class="mt-4 p-4 bg-gray-50 rounded-lg">
+            <p class="text-sm text-gray-600">
+              Selecciona un patrón de división para ver la descripción aquí.
+            </p>
+          </div>
+        </section>
+
+        <!-- Preview Section -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-6">
+          <h2 class="text-2xl font-semibold text-gray-800 mb-4">
+            3. Vista previa
+          </h2>
+          <div id="preview-container" class="text-center py-8">
+            <div class="text-gray-500">
+              <svg
+                class="w-16 h-16 mx-auto mb-4 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                />
+              </svg>
+              <p class="text-lg">Sube una imagen para ver la vista previa</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Export Section -->
+        <section class="bg-white rounded-lg shadow-md p-6">
+          <h2 class="text-2xl font-semibold text-gray-800 mb-4">
+            4. Exportar PDF
+          </h2>
+          <div class="flex flex-col sm:flex-row gap-4 items-center">
+            <button
+              id="export-pdf"
+              class="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+              disabled
+            >
+              <svg
+                class="w-5 h-5 inline mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+              Generar PDF para imprimir
+            </button>
+            <div class="text-sm text-gray-600">
+              <p>El PDF contendrá cada parte en una página separada</p>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <!-- Error Toast -->
+      <div
+        id="error-toast"
+        class="fixed top-4 right-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg shadow-lg hidden"
+      >
+        <div class="flex items-center">
+          <svg
+            class="w-5 h-5 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          <span id="error-message"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/src/main.js" type="module"></script>
+  </body>
+</html>

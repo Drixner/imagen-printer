@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+/* Estilos para FilePond en móvil */
+@media (max-width: 640px) {
+  .filepond-container {
+    max-width: 100%;
+    min-height: 150px;
+  }
+  
+  .filepond--root {
+    margin-bottom: 0;
+  }
+  
+  .filepond--panel-root {
+    border-radius: 0.5rem;
+  }
+}
+
+/* Ajustes generales de responsive */
+.container {
+  width: 100%;
+  padding-right: 1rem;
+  padding-left: 1rem;
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+  }
+}
