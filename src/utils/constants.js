@@ -16,7 +16,7 @@ export const PAPER_SIZES = {
     heightPx: 4961 // px a 300 DPI
   }
 };
-
+//esto es comentario de prueba
 export const DPI_OPTIONS = [
   { value: 150, label: '150 DPI - Calidad básica' },
   { value: 300, label: '300 DPI - Calidad estándar' },
