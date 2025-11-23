@@ -228,7 +228,7 @@ class FileUploader {
 
     const style = document.createElement('style');
     style.id = styleId;
-    style.textContent = `
+   style.textContent = `
       .filepond--root {
         font-family: inherit;
       }
@@ -248,6 +248,7 @@ class FileUploader {
       .filepond--drop-label {
         color: #64748b;
         font-size: 14px;
+        min-height: 100px;
       }
       
       .filepond-label-content {
@@ -255,7 +256,8 @@ class FileUploader {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 2rem;
+        padding: 1.5rem 1rem;
+        padding-top: 150px;
       }
       
       .upload-icon {
@@ -350,7 +352,7 @@ class FileUploader {
           height: 32px;
         }
       }
-    `;
+    `; 
     
     document.head.appendChild(style);
   }

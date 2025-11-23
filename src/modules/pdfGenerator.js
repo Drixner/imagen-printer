@@ -1,5 +1,5 @@
-import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
-import { PAPER_SIZES, convertMmToPx } from '../utils/constants.js';
+import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
+import { PAPER_SIZES, convertMmToPx } from "../utils/constants.js";
 
 class PDFGenerator {
   constructor() {
@@ -11,14 +11,14 @@ class PDFGenerator {
    * Inicializa un nuevo documento PDF
    * @param {string} paperSize - 'A4' o 'A3'
    */
-  async initDocument(paperSize = 'A4') {
+  async initDocument(paperSize = "A4") {
     this.pdfDoc = await PDFDocument.create();
-    
+
     // Configurar metadatos
-    this.pdfDoc.setTitle('Imagen Dividida para Impresión');
-    this.pdfDoc.setAuthor('Imagen Printer Tool');
-    this.pdfDoc.setSubject('Imagen dividida en múltiples páginas');
-    this.pdfDoc.setCreator('Imagen Printer');
+    this.pdfDoc.setTitle("Imagen Dividida para Impresión");
+    this.pdfDoc.setAuthor("Imagen Printer Tool");
+    this.pdfDoc.setSubject("Imagen dividida en múltiples páginas");
+    this.pdfDoc.setCreator("Imagen Printer");
   }
 
   /**
@@ -29,10 +29,11 @@ class PDFGenerator {
    */
   async generatePDF(imageParts, options = {}) {
     const {
-      paperSize = 'A4',
+      paperSize = "A4",
+      pattern = null,
       margins = 10,
       addGuides = true,
-      addPageNumbers = true
+      addPageNumbers = true,
     } = options;
 
     try {
@@ -40,11 +41,18 @@ class PDFGenerator {
       const font = await this.pdfDoc.embedFont(StandardFonts.Helvetica);
 
       for (const [index, part] of imageParts.entries()) {
-        // Crear nueva página
-        const page = this.pdfDoc.addPage([
-          PAPER_SIZES[paperSize].widthPx,
-          PAPER_SIZES[paperSize].heightPx
-        ]);
+        // Determinar orientación basada en el patrón
+        const isLandscape = pattern && pattern.landscape === true;
+
+        // Crear nueva página con orientación apropiada
+        const pageWidth = isLandscape
+          ? PAPER_SIZES[paperSize].heightPx
+          : PAPER_SIZES[paperSize].widthPx;
+        const pageHeight = isLandscape
+          ? PAPER_SIZES[paperSize].widthPx
+          : PAPER_SIZES[paperSize].heightPx;
+
+        const page = this.pdfDoc.addPage([pageWidth, pageHeight]);
 
         // Agregar imagen
         const image = await this.embedImage(part.dataURL);
@@ -66,7 +74,6 @@ class PDFGenerator {
 
       // Generar PDF
       return await this.pdfDoc.save();
-
     } catch (error) {
       throw new Error(`Error al generar PDF: ${error.message}`);
     }
@@ -78,8 +85,8 @@ class PDFGenerator {
    * @returns {Promise<PDFImage>}
    */
   async embedImage(dataURL) {
-    const imageData = dataURL.split(',')[1];
-    const imageBytes = Uint8Array.from(atob(imageData), c => c.charCodeAt(0));
+    const imageData = dataURL.split(",")[1];
+    const imageBytes = Uint8Array.from(atob(imageData), (c) => c.charCodeAt(0));
     return await this.pdfDoc.embedPng(imageBytes);
   }
 
@@ -93,8 +100,8 @@ class PDFGenerator {
   async addImageToPage(page, image, dimensions, margins) {
     const pageWidth = page.getWidth();
     const pageHeight = page.getHeight();
-    const maxWidth = pageWidth - (margins * 1.2);
-    const maxHeight = pageHeight - (margins * 1.2);
+    const maxWidth = pageWidth - margins * 1.2;
+    const maxHeight = pageHeight - margins * 1.2;
 
     // Calcular escala manteniendo proporción
     const scale = Math.min(
@@ -113,7 +120,7 @@ class PDFGenerator {
       x,
       y,
       width: finalWidth,
-      height: finalHeight
+      height: finalHeight,
     });
   }
 
@@ -134,24 +141,24 @@ class PDFGenerator {
     page.drawLine({
       start: { x: margins, y: margins },
       end: { x: margins + guideLength, y: margins },
-      color: guideColor
+      color: guideColor,
     });
     page.drawLine({
       start: { x: margins, y: margins },
       end: { x: margins, y: margins + guideLength },
-      color: guideColor
+      color: guideColor,
     });
 
     // Esquina superior derecha
     page.drawLine({
       start: { x: pageWidth - margins - guideLength, y: margins },
       end: { x: pageWidth - margins, y: margins },
-      color: guideColor
+      color: guideColor,
     });
     page.drawLine({
       start: { x: pageWidth - margins, y: margins },
       end: { x: pageWidth - margins, y: margins + guideLength },
-      color: guideColor
+      color: guideColor,
     });
 
     // Esquinas inferiores similares...
@@ -174,7 +181,7 @@ class PDFGenerator {
       y: 20,
       size: 10,
       font,
-      color: rgb(0.5, 0.5, 0.5)
+      color: rgb(0.5, 0.5, 0.5),
     });
   }
 
@@ -186,14 +193,16 @@ class PDFGenerator {
    */
   addPartInfo(page, font, part) {
     const { position, paperSize, dpi } = part;
-    const info = `Posición: Fila ${position.row + 1}, Columna ${position.col + 1} | ${paperSize} | ${dpi} DPI`;
+    const info = `Posición: Fila ${position.row + 1}, Columna ${
+      position.col + 1
+    } | ${paperSize} | ${dpi} DPI`;
 
     page.drawText(info, {
       x: 30,
       y: page.getHeight() - 20,
       size: 10,
       font,
-      color: rgb(0.5, 0.5, 0.5)
+      color: rgb(0.5, 0.5, 0.5),
     });
   }
 }
